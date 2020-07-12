@@ -6,6 +6,12 @@ import pandas as pd
 import tensorflow as tf
 from tensorflow import keras as k
 import matplotlib.pyplot as plt
+import threading
+import cv2
+import gym
+import random
+import time
+
 
 # More libraries as per need may be added with time
 
@@ -34,9 +40,7 @@ class A3C_Atari:
                                 kernel_initializer=k.initializers.glorot_normal(),
                                 activation=k.activations.relu, padding='valid')(conv1)
 
-        #conv3 = k.layers.Conv2D(16, kernel_size=(4, 4), strides=(1, 1),
-                              #  kernel_initializer=k.initializers.glorot_normal(),
-                              #  activation=k.activations.relu, padding='valid')(conv2)
+    
 
         dense1 = k.layers.Flatten()(conv2)
         dense2 = k.layers.Dense(256, activation=k.activations.relu,
@@ -44,10 +48,11 @@ class A3C_Atari:
                                 bias_initializer=k.initializers.glorot_normal())(dense1)
         actions = k.layers.Dense(self.n_actions, activation=k.activations.softmax,
                                  kernel_initializer=k.initializers.glorot_normal(),
-                                 bias_initializer=k.initializers.glorot_normal())(dense2)
+                                 bias_initializer=k.initializers.glorot_normal())(dense2)                     #Actor
         value = k.layers.Dense(1, activation=None,
                                kernel_initializer=k.initializers.glorot_normal(),
-                               bias_initializer=k.initializers.glorot_normal())(dense2)
+                               bias_initializer=k.initializers.glorot_normal())(dense2)                       #Critic      
+        
         print(input_.shape)
 
         model = k.Model(inputs=input_, outputs=[actions, value])
@@ -62,7 +67,7 @@ class A3C_Atari:
     def proccess_input(self, state):
         state = state[35:195:2, 0:160:2, :]
         state = cv2.resize(state, (80, 80), interpolation=cv2.INTER_CUBIC)
-        state = 0.299 * state[:, :, 0] + 0.587 * state[:, :, 1] + 0.114 * state[:, :, 2]
+        state = 0.299 * state[:, :, 0] + 0.587 * state[:, :, 1] + 0.114 * state[:, :, 2]                #Intersting way to convert my coloured images to Grayscale.
         state = state / 255.0
         return state
 
