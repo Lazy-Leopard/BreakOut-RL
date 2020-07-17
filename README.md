@@ -23,7 +23,7 @@ The tensorflow version is no hard and fast restriction, you may use any version 
 ## Running
 
 First intialize the **model_breakout_6.h5**  and **model_breakout_7.h5** files with small weights for the network given.The file **model_breakout_7.h5** keep on updating per 50 episodes with better weights using the Entropy Policy.
-Uncomment the line 142 and 144 of the code, to see your agent play, learn and get better. Line 142 contains the condition such that you only observe one of the eight play.
+Uncomment the line 142 and 144 of the code, to see your agent play, learn and get better. Line 142 contains the condition such that you only observe one of the eight agents(workers) play.
 
 ## Sample
 
